@@ -30,13 +30,11 @@
     <Content Include="$(MSBuildThisFileDirectory)html\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="$(MSBuildThisFileDirectory)html\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="$(MSBuildThisFileDirectory)html\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="$(MSBuildThisFileDirectory)html\index.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)html\index.html" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)html\fonts\glyphicons-halflings-regular.svg" />
-    <None Include="$(MSBuildThisFileDirectory)html\js\bootstrap.min.js" />
-    <None Include="$(MSBuildThisFileDirectory)html\js\jquery.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)html\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="$(MSBuildThisFileDirectory)html\js\bootstrap.min.js" />
+    <Content Include="$(MSBuildThisFileDirectory)html\js\jquery.min.js" />
   </ItemGroup>
 </Project>

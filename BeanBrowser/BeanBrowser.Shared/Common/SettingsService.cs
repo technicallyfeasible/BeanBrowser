@@ -5,14 +5,20 @@ namespace BeanBrowser.Common
 {
 	public delegate void SettingsChangeEventHandler(Object sender, EventArgs e);
 
+	public enum StorageLocations
+	{
+		InstallDir,
+		Local,
+		Remote
+	}
 
     public class SettingsService
     {
 	    private const String RootUrlKey = "rootUrl";
-	    private const String UseLocalStorageKey = "useLocalStorage";
+	    private const String StorageLocationKey = "storageLocation";
 
 		private static String rootUrl;
-		private static Boolean? useLocalStorage;
+		private static StorageLocations? storageLocation;
 
 
 	    public static event SettingsChangeEventHandler SettingsChanged;
@@ -46,14 +52,14 @@ namespace BeanBrowser.Common
 		    }
 		}
 
-	    public static Boolean? UseLocalStorage
+	    public static StorageLocations? StorageLocation
 	    {
-			get { return TryGetValue<Boolean?>(UseLocalStorageKey) ?? true; }
+			get { return TryGetValue<StorageLocations?>(StorageLocationKey) ?? StorageLocations.InstallDir; }
 		    set
 		    {
-			    if ((useLocalStorage ?? TryGetValue<Boolean?>(UseLocalStorageKey)) == value)
+				if ((storageLocation ?? TryGetValue<StorageLocations?>(StorageLocationKey)) == value)
 				    return;
-			    useLocalStorage = value;
+			    storageLocation = value;
 		    }
 	    }
 
@@ -63,7 +69,7 @@ namespace BeanBrowser.Common
 	    public static void Discard()
 	    {
 		    rootUrl = null;
-			useLocalStorage = null;
+			storageLocation = null;
 	    }
 
 
@@ -72,13 +78,13 @@ namespace BeanBrowser.Common
 		/// </summary>
 	    public static void Save()
 		{
-			if (rootUrl == null && useLocalStorage == null)
+			if (rootUrl == null && storageLocation == null)
 				return;
 
 			SetValue(RootUrlKey, rootUrl);
 			rootUrl = null;
-			SetValue(UseLocalStorageKey, useLocalStorage);
-			useLocalStorage = null;
+			SetValue(StorageLocationKey, storageLocation);
+			storageLocation = null;
 			OnSettingsChanged();
 		    
 	    }

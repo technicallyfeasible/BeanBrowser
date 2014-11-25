@@ -17,11 +17,16 @@
         <!-- Content Section 1-->
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0, 0, 0, 10" Text="Root url" />
+			
 			<RadioButton x:Name="ButtonRemote" Content="Use remote URL" GroupName="RootPath" />
             <TextBox x:Name="RootUrl" Text="http://localhost:8080/index.html" Margin="0,0,0,25" TextWrapping="Wrap" />
+			
 			<RadioButton x:Name="ButtonLocal" Content="Use local storage" GroupName="RootPath" />
 			<TextBox x:Name="LocalDataPath" Margin="0,0,0,25" TextWrapping="Wrap" IsReadOnly="True" />
-        </StackPanel>
+		
+			<RadioButton x:Name="ButtonInstallDir" Content="Use install location" GroupName="RootPath" />
+			<TextBox x:Name="InstallDirDataPath" Margin="0,0,0,25" TextWrapping="Wrap" IsReadOnly="True" />
+		</StackPanel>
 
 		<Button Content="Save" HorizontalAlignment="Right" Click="SaveClick" />
 	</StackPanel>

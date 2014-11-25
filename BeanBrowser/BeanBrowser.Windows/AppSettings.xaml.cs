@@ -20,20 +20,28 @@ namespace BeanBrowser
 		private void PageLoaded(object sender, RoutedEventArgs e)
 		{
 			LocalDataPath.Text = ApplicationData.Current.LocalFolder.Path;
+			InstallDirDataPath.Text = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
 			RootUrl.Text = SettingsService.RootUrl;
-			Boolean useLocal = SettingsService.UseLocalStorage.GetValueOrDefault();
-			ButtonRemote.IsChecked = !useLocal;
-			ButtonLocal.IsChecked = useLocal;
+			StorageLocations location = SettingsService.StorageLocation.GetValueOrDefault();
+			ButtonRemote.IsChecked = (location == StorageLocations.Remote);
+			ButtonInstallDir.IsChecked = (location == StorageLocations.InstallDir);
+			ButtonLocal.IsChecked = (location == StorageLocations.Local);
 		}
 
 
 		private async void SaveClick(object sender, RoutedEventArgs e)
 		{
-			SettingsService.UseLocalStorage = ButtonLocal.IsChecked;
+			StorageLocations location = StorageLocations.InstallDir;
+			if(ButtonLocal.IsChecked.GetValueOrDefault())
+				location = StorageLocations.Local;
+			else if (ButtonRemote.IsChecked.GetValueOrDefault())
+				location = StorageLocations.Remote;
+
+			SettingsService.StorageLocation = location;
 			SettingsService.RootUrl = RootUrl.Text;
 
 			// if a remote url is used it must be valid
-			if (!SettingsService.UseLocalStorage.GetValueOrDefault())
+			if (location == StorageLocations.Remote)
 			{
 				String error = null;
 				try

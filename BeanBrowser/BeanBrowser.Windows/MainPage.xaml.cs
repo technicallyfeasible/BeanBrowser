@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
@@ -18,6 +17,16 @@ namespace BeanBrowser
 {
 	public sealed class LocalUriStreamResolver : IUriToStreamResolver
 	{
+		private StorageFolder folder; 
+
+		public LocalUriStreamResolver(StorageLocations location)
+		{
+			if (location == StorageLocations.Local)
+				folder = ApplicationData.Current.LocalFolder;
+			else
+				folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+		}
+
 		public IAsyncOperation<IInputStream> UriToStreamAsync(Uri uri)
 		{
 			if (uri == null)
@@ -33,16 +42,18 @@ namespace BeanBrowser
 
 		private async Task<IInputStream> GetContent(String path)
 		{
-			// We use a package folder as the source, but the same principle should apply
-			// when supplying content from other locations
 			try
 			{
-				var localFolder = ApplicationData.Current.LocalFolder;
-				var requestedFile = await localFolder.GetFileAsync(path.TrimStart('/', '\\').Replace('/', '\\'));
+				//var localFolder = ApplicationData.Current.LocalFolder;
+				path = "html\\" + path.TrimStart('/', '\\');
+				var requestedFile = await folder.GetFileAsync(path.TrimStart('/', '\\').Replace('/', '\\'));
 				var stream = await requestedFile.OpenReadAsync();
 				return stream;
 			}
-			catch (Exception) { throw new Exception("Invalid path"); }
+			catch (Exception)
+			{
+				throw new Exception("Invalid path");
+			}
 		}
 	}
 	
@@ -96,10 +107,10 @@ namespace BeanBrowser
 
 		private void UpdateBrowser()
 		{
-			if (SettingsService.UseLocalStorage.GetValueOrDefault())
+			if (SettingsService.StorageLocation != StorageLocations.Remote)
 			{
 				Uri uri = this.Browser.BuildLocalStreamUri("data", "index.html");
-				Browser.NavigateToLocalStreamUri(uri, new LocalUriStreamResolver());
+				Browser.NavigateToLocalStreamUri(uri, new LocalUriStreamResolver(SettingsService.StorageLocation.GetValueOrDefault()));
 			}
 			else
 			{
