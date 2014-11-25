@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="7261JensElstner.BeanBrowser" Publisher="CN=40987996-225E-4006-B95D-265662CE3B76" Version="1.1.0.0" />
+  <Identity Name="7261JensElstner.BeanBrowser" Publisher="CN=40987996-225E-4006-B95D-265662CE3B76" Version="1.1.0.1" />
   <Properties>
     <DisplayName>Bean Browser</DisplayName>
     <PublisherDisplayName>Jens Elstner</PublisherDisplayName>
