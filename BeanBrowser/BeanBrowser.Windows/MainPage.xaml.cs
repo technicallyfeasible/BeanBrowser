@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -12,6 +14,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web;
 using BeanBrowser.Common;
+using BeanBrowser.Connector;
+using BeanExplorer.Connector;
 
 namespace BeanBrowser
 {
@@ -56,7 +60,15 @@ namespace BeanBrowser
 			}
 		}
 	}
-	
+
+
+	public enum MsgCodes
+	{
+		Status = 0x01,
+		Button = 0x02,
+		Voting = 0x03
+	}
+
 	
 	/// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -64,15 +76,28 @@ namespace BeanBrowser
     public sealed partial class MainPage : Page
     {
 	    private NavigationHelper navigationHelper;
+		private List<Bean> beans = new List<Bean>();
+		private List<DeviceInformation> devices;
+
 
 	    public MainPage()
         {
             InitializeComponent();
+
+			DispatchHelper.Dispatcher = Dispatcher;
+
 			this.navigationHelper = new NavigationHelper(this);
 			this.navigationHelper.LoadState += LoadState;
 			this.navigationHelper.SaveState += SaveState;
-
         }
+
+		private void SetStatus(String text)
+		{
+			DispatchHelper.DispatchInvoke(() =>
+			{
+				StatusText.Text = text;
+			});
+		}
 
 	    private void LoadState(object sender, LoadStateEventArgs e)
 	    {
@@ -89,6 +114,8 @@ namespace BeanBrowser
 			SettingsPane.GetForCurrentView().CommandsRequested += CommandsRequested;
 			SettingsService.SettingsChanged += SettingsChanged;
 			UpdateBrowser();
+
+			ScanDevices();
 		}
 
 		private void SettingsChanged(object sender, EventArgs e)
@@ -127,10 +154,10 @@ namespace BeanBrowser
 		}
 
 
-
 		/// <summary>
 		/// Handler for the CommandsRequested event. Add custom SettingsCommands here.
 		/// </summary>
+		/// <param name="settingsPane"></param>
 		/// <param name="e">Event data that includes a vector of commands (ApplicationCommands)</param>
 		void CommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs e)
 		{
@@ -149,9 +176,9 @@ namespace BeanBrowser
 			{
 				await Browser.InvokeScriptAsync("msgVote", new[] { vote.ToString() });
 			}
-			catch
+			catch (Exception ex)
 			{
-
+				SetStatus(ex.Message);
 			}
 		}
 
@@ -176,6 +203,81 @@ namespace BeanBrowser
 		{
 			AppSettings sf = new AppSettings();
 			sf.Show();
+		}
+
+		private async void ScanDevices()
+		{
+			Bean beanFinder = new Bean();
+			beanFinder.Progress += (s, ep) => SetStatus(ep.Activity);
+			devices = await beanFinder.FindDevices();
+			ButtonStart.IsEnabled = true;
+		}
+
+		private async void StartClick(object sender, RoutedEventArgs e)
+		{
+			if (devices == null)
+				return;
+
+			ButtonStart.IsEnabled = false;
+
+			try
+			{
+				foreach (DeviceInformation device in devices)
+				{
+					Bean bean = new Bean();
+					beans.Add(bean);
+					bean.Progress += (s, ep) => SetStatus(ep.Activity);
+					bean.DataReceived += DataReceived;
+					await bean.Subscribe(device.Id);
+				}
+
+				//SetStatus("Devices found: " + devices.Count);
+
+				ButtonStop.IsEnabled = true;
+			}
+			catch (Exception ex)
+			{
+				StatusText.Text = ex.Message;
+				ButtonStart.IsEnabled = true;
+			}
+		}
+
+		private void DataReceived(object sender, DataReceivedEventArgs e)
+		{
+			SerialDataReceivedEventArgs serial = (e as SerialDataReceivedEventArgs);
+			if (serial != null && serial.Data != null && serial.Data.Length > 0)
+			{
+				switch (serial.Data[0])
+				{
+					case (Byte) MsgCodes.Button:
+						for(Int32 i = 0; i < 4; i++)
+							if (serial.Data.Length > i + 1 && serial.Data[i + 1]> 0)
+							{
+								Int32 button = i;
+								DispatchHelper.DispatchInvoke(() => SendVote(button));
+							}
+						break;
+				}
+			}
+		}
+
+		private void StopClick(object sender, RoutedEventArgs e)
+		{
+			ButtonStop.IsEnabled = false;
+			try
+			{
+				foreach (Bean bean in beans)
+				{
+					bean.Unsubscribe();
+				}
+				beans.Clear();
+				ButtonStart.IsEnabled = true;
+			}
+			catch (Exception ex)
+			{
+				StatusText.Text = ex.Message;
+				ButtonStop.IsEnabled = true;
+			}
 		}
     }
 }

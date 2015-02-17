@@ -54,10 +54,10 @@ namespace BeanBrowser.Common
 
 	    public static StorageLocations? StorageLocation
 	    {
-			get { return TryGetValue<StorageLocations?>(StorageLocationKey) ?? StorageLocations.InstallDir; }
+			get { return (StorageLocations?) TryGetValue<Int32?>(StorageLocationKey).GetValueOrDefault(); }
 		    set
 		    {
-				if ((storageLocation ?? TryGetValue<StorageLocations?>(StorageLocationKey)) == value)
+				if ((storageLocation ?? (StorageLocations?) TryGetValue<Int32?>(StorageLocationKey)) == value)
 				    return;
 			    storageLocation = value;
 		    }
@@ -83,7 +83,7 @@ namespace BeanBrowser.Common
 
 			SetValue(RootUrlKey, rootUrl);
 			rootUrl = null;
-			SetValue(StorageLocationKey, storageLocation);
+			SetValue(StorageLocationKey, (Int32) storageLocation.GetValueOrDefault());
 			storageLocation = null;
 			OnSettingsChanged();
 		    

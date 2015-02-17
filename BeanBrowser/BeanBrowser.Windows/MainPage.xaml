@@ -22,6 +22,9 @@
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Column="0">
 					<AppBarButton Icon="Setting" Label="Settings" Click="SettingsClick" />
+					<AppBarButton x:Name="ButtonStart" Icon="Play" Label="Start" IsEnabled="False" Click="StartClick" />
+					<AppBarButton x:Name="ButtonStop" Icon="Stop" Label="Stop" IsEnabled="False" Click="StopClick" />
+					<TextBlock x:Name="StatusText" Text="" Style="{StaticResource TitleTextBlockStyle}" FontSize="24" VerticalAlignment="Center" />
 				</StackPanel>
 				
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">

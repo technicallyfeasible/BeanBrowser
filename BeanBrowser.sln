@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeanBrowser.Windows", "Bean
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeanBrowser.WindowsPhone", "BeanBrowser\BeanBrowser.WindowsPhone\BeanBrowser.WindowsPhone.csproj", "{8C131636-6C4F-4769-AA63-2E1EF1E4DBDE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{D7DFC70C-0AE6-410B-A5FA-6BFADE6C99E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Img2Hex", "Tools\Img2Hex\Img2Hex.csproj", "{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		BeanBrowser\BeanBrowser.Shared\BeanBrowser.Shared.projitems*{a40612d8-78da-428d-ba12-75780c4f91fa}*SharedItemsImports = 13
@@ -72,6 +76,16 @@ Global
 		{8C131636-6C4F-4769-AA63-2E1EF1E4DBDE}.Release|x86.ActiveCfg = Release|x86
 		{8C131636-6C4F-4769-AA63-2E1EF1E4DBDE}.Release|x86.Build.0 = Release|x86
 		{8C131636-6C4F-4769-AA63-2E1EF1E4DBDE}.Release|x86.Deploy.0 = Release|x86
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Release|ARM.ActiveCfg = Release|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Release|x64.ActiveCfg = Release|Any CPU
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +94,6 @@ Global
 		{A40612D8-78DA-428D-BA12-75780C4F91FA} = {A496D1DA-39F1-403E-A5A4-8F98F1327C48}
 		{DE12ACC0-C4F0-469E-9E95-4B97B13C031E} = {A496D1DA-39F1-403E-A5A4-8F98F1327C48}
 		{8C131636-6C4F-4769-AA63-2E1EF1E4DBDE} = {A496D1DA-39F1-403E-A5A4-8F98F1327C48}
+		{70FBD4C3-BD85-45F2-A3EA-28204A6D17A7} = {D7DFC70C-0AE6-410B-A5FA-6BFADE6C99E0}
 	EndGlobalSection
 EndGlobal

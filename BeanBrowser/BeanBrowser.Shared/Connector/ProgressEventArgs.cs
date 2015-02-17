@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BeanBrowser.Connector
+namespace BeanExplorer.Connector
 {
 	public class ProgressEventArgs : EventArgs
 	{
